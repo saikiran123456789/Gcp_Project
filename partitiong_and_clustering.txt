@@ -1,0 +1,42 @@
+create table if not exists partioning.without_partition_and_clustering as SELECT *  FROM bigquery-public-data.iowa_liquor_sales.sales
+
+
+create table partioning.with_partition_and_clustering(
+invoice_and_item_number string,
+date date,
+store_number string,
+store_name string,
+address string,
+city string,
+zip_code string,
+store_location geography,
+country_number string,
+country string,
+category string,
+category_name string,
+vendor_number string,
+vendor_name string,
+item_number string,
+item_description string,
+pack integer,
+bottle_volume_ml integer,
+state_bottle_cost float64,
+state_bottle_retail float64,
+bottles_sold integer,
+sale_dollars float64,
+volume_sold_litres float64,
+volume_sold_gallons float64)
+partition by date
+cluster by store_number,store_name,city;
+
+
+insert into partioning.with_partition_and_clustering select * from partioning.without_partition_and_clustering;
+
+
+
+
+
+SELECT * FROM `saifirstproject-453508.partioning.with_partition_and_clustering` where date = '2025-02-12' and city = 'ANKENY'
+
+
+SELECT * FROM `saifirstproject-453508.partioning.without_partition_and_clustering` where date = '2025-02-12' and city = 'ANKENY'
